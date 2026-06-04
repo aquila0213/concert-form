@@ -622,7 +622,7 @@
 
   // ---- Apps Script 設定 ----
   // ↓ デプロイ後のWeb App URLをここに設定してください
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzdGDuh3ud39A-wVA73rZ95AmRWU7hopqi49QmDOo51tupp4ZHJ1sD6-y0S3k6SKnI2w/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztiklTKLjm3XBCimFdiErSxiFrz479tQcVv-yThLJoQ0MSzVCAqiEAc0bqbsvpX99Vng/exec';
 
   // ---- 送信 ----
   document.getElementById('concertForm').addEventListener('submit', async function(e) {
@@ -643,6 +643,21 @@
     btn.disabled = true;
 
     const val = id => document.getElementById(id).value.trim();
+
+    // 画像をbase64に変換
+    const flyerInput = document.getElementById('flyerFile');
+    const imagePromises = Array.from(flyerInput.files).map(file => {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const ext = file.name.split('.').pop().toLowerCase();
+          resolve({ data: reader.result, type: file.type, ext });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    const images = await Promise.all(imagePromises);
+
     const data = {
       orgName:      val('orgName'),
       contactName:  val('contactName'),
@@ -658,6 +673,7 @@
       program:      val('program'),
       audience:     val('audience'),
       videoUrl:     val('videoUrl'),
+      images,
     };
 
     try {

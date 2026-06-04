@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram掲載申込フォーム｜コマキ楽器</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      min-height: 100vh;
+      padding: 40px 16px 80px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header .logo {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.08);
+      max-width: 680px;
+      margin: 0 auto 24px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-header .icon { font-size: 18px; }
+    .section-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .05em;
+    }
+
+    .section-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .badge-required {
+      font-size: 11px;
+      font-weight: 700;
+      background: #e74c3c;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: .04em;
+    }
+    .badge-optional {
+      font-size: 11px;
+      font-weight: 600;
+      background: #eee;
+      color: #666;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .field-hint {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="time"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #1d1d1f;
+      background: #fafafa;
+      transition: border-color .2s, background .2s;
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      border-color: #3d5afe;
+      background: #fff;
+    }
+    input.error, textarea.error {
+      border-color: #e74c3c;
+      background: #fff5f5;
+    }
+    textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
+
+    .char-counter {
+      font-size: 12px;
+      color: #aaa;
+      text-align: right;
+    }
+    .char-counter.warn { color: #e67e22; }
+    .char-counter.over  { color: #e74c3c; font-weight: 700; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .upload-zone {
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      background: #fafafa;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag { border-color: #3d5afe; background: #f0f3ff; }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      width: 100%; height: 100%; border: none; padding: 0;
+    }
+    .upload-zone .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-zone .upload-label { font-size: 14px; font-weight: 600; color: #444; }
+    .upload-zone .upload-sub { font-size: 12px; color: #999; margin-top: 4px; }
+    .file-name {
+      font-size: 13px;
+      color: #3d5afe;
+      margin-top: 8px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .video-wrap { display: flex; flex-direction: column; gap: 10px; }
+    .or-divider {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      font-weight: 600;
+      letter-spacing: .06em;
+      position: relative;
+    }
+    .or-divider::before, .or-divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: #e0e0e0;
+    }
+    .or-divider::before { left: 0; }
+    .or-divider::after  { right: 0; }
+
+    .consent-box {
+      border: 1.5px solid #ddd;
+      border-radius: 12px;
+      padding: 20px 20px 20px 16px;
+      background: #fafafa;
+    }
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .consent-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #3d5afe;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+    .consent-note {
+      font-size: 12px;
+      color: #777;
+      margin-top: 10px;
+      line-height: 1.7;
+      padding-left: 32px;
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #e74c3c;
+      display: none;
+    }
+
+    .submit-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, #3d5afe, #7c4dff);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 60px;
+      font-size: 17px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: .06em;
+      box-shadow: 0 4px 18px rgba(61,90,254,.35);
+      transition: opacity .2s, transform .15s;
+      width: 100%;
+      max-width: 360px;
+    }
+    .btn-submit:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    .submit-note {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 12px;
+    }
+
+    .success-banner {
+      display: none;
+      background: #eafaf1;
+      border: 2px solid #2ecc71;
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .success-banner .s-icon { font-size: 40px; margin-bottom: 10px; }
+    .success-banner h3 { font-size: 18px; font-weight: 700; color: #1a7a4a; margin-bottom: 6px; }
+    .success-banner p { font-size: 14px; color: #555; line-height: 1.7; }
+
+    @media (max-width: 480px) {
+      .row-2 { grid-template-columns: 1fr; }
+      .section-body { padding: 20px; }
+      .btn-submit { padding: 16px 32px; font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo">Komaki Gakki</div>
+  <h1>🎵 Instagram掲載申込フォーム</h1>
+  <p>コマキ楽器公式Instagramへのコンサート情報の掲載をご希望の方はこちらからお申し込みください。</p>
+</div>
+
+<form id="concertForm" novalidate>
+
+  <!-- ① 基本情報 -->
+  <div class="form-card">
+    <div class="section-header">
+      <span class="icon">📋</span>
+      <h2>セクション① 基本情報</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <label for="orgName">団体名 <span class="badge-required">必須</span></label>
+        <div class="field-hint">例：〇〇パーカッションアンサンブル</div>
+        <input type="text" id="orgName" name="orgName" placeholder="団体名を入力してください" />
+        <span class="error-msg" id="err-orgName">団体名を入力してください</span>
+      </div>
+
+      <div class="field">
+        <label for="contactName">担当者名 <span class="badge-required">必須</span></label>
+        <input type="text" id="contactName" name="contactName" placeholder="例：山田 太郎" />
+        <span class="error-msg" id="err-contactName">担当者名を入力してください</span>
+      </div>
+
+      <div class="field">
+        <label for="email">メールアドレス <span class="badge-required">必須</span></label>
+        <input type="email" id="email" name="email" placeholder="例：info@example.com" />
+        <span class="error-msg" id="err-email">正しいメールアドレスを入力してください</span>
+      </div>
+
+      <div class="field">
+        <label for="instagram">Instagramアカウント <span class="badge-required">必須</span></label>
+        <div class="field-hint">👉 タグ付けに使用します。例：@komakimusic</div>
+        <input type="text" id="instagram" name="instagram" placeholder="@アカウント名" />
+        <span class="error-msg" id="err-instagram">Instagramアカウントを入力してください</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ② 公演情報 -->
+  <div class="form-card">
+    <div class="section-header">
+      <span class="icon">🎭</span>
+      <h2>セクション② 公演情報</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <label for="concertTitle">公演タイトル <span class="badge-required">必須</span></label>
+        <input type="text" id="concertTitle" name="concertTitle" placeholder="例：春の室内楽コンサート2026" />
+        <span class="error-msg" id="err-concertTitle">公演タイトルを入力してください</span>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label for="concertDate">開催日 <span class="badge-required">必須</span></label>
+          <input type="date" id="concertDate" name="concertDate" />
+          <span class="error-msg" id="err-concertDate">開催日を選択してください</span>
+        </div>
+        <div class="field">
+          <label for="concertTime">開演時間 <span class="badge-required">必須</span></label>
+          <input type="time" id="concertTime" name="concertTime" />
+          <span class="error-msg" id="err-concertTime">開演時間を選択してください</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="venue">会場名 <span class="badge-required">必須</span></label>
+        <input type="text" id="venue" name="venue" placeholder="例：〇〇ホール 大ホール" />
+        <span class="error-msg" id="err-venue">会場名を入力してください</span>
+      </div>
+
+      <div class="field">
+        <label for="ticket">チケット情報 <span class="badge-required">必須</span></label>
+        <div class="field-hint">例：一般 3,000円 ／ 学生 2,000円</div>
+        <textarea id="ticket" name="ticket" rows="3" placeholder="料金・販売方法などをご記入ください"></textarea>
+        <span class="error-msg" id="err-ticket">チケット情報を入力してください</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ③ 告知用コンテンツ -->
+  <div class="form-card">
+    <div class="section-header">
+      <span class="icon">✍️</span>
+      <h2>セクション③ 告知用コンテンツ</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <label for="catchcopy">キャッチコピー <span class="badge-required">必須</span></label>
+        <div class="field-hint">👉 30文字以内。例：音楽で世界を旅する夜</div>
+        <input type="text" id="catchcopy" name="catchcopy" placeholder="30文字以内でキャッチコピーを入力" maxlength="60" />
+        <div class="char-counter" id="cc-catchcopy">0 / 30文字</div>
+        <span class="error-msg" id="err-catchcopy">キャッチコピーを30文字以内で入力してください</span>
+      </div>
+
+      <div class="field">
+        <label for="description">見どころ・紹介文 <span class="badge-required">必須</span></label>
+        <div class="field-hint">👉 100〜150文字程度推奨。投稿のメインテキストになります。</div>
+        <textarea id="description" name="description" rows="5" placeholder="公演の魅力・見どころを記入してください（100〜150文字推奨）"></textarea>
+        <div class="char-counter" id="cc-description">0 文字</div>
+        <span class="error-msg" id="err-description">見どころ・紹介文を100文字以上で入力してください</span>
+      </div>
+
+      <div class="field">
+        <label for="program">プログラム内容 <span class="badge-optional">任意</span></label>
+        <div class="field-hint">例：坂本龍一 ／ ディズニー音楽 ほか</div>
+        <textarea id="program" name="program" rows="3" placeholder="演奏曲目・プログラムをご記入ください（任意）"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="audience">こんな方におすすめ <span class="badge-optional">任意</span></label>
+        <div class="field-hint">例：クラシック初心者・家族連れ歓迎</div>
+        <textarea id="audience" name="audience" rows="3" placeholder="ターゲットや来場をおすすめする方についてご記入ください（任意）"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ④ 素材提出 -->
+  <div class="form-card">
+    <div class="section-header">
+      <span class="icon">🖼️</span>
+      <h2>セクション④ 素材提出</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <label>チラシ画像 <span class="badge-required">必須</span></label>
+        <div class="field-hint">形式：JPG / PNG　推奨：正方形または縦長</div>
+        <div class="upload-zone" id="flyerZone">
+          <input type="file" id="flyerFile" name="flyerFile" accept="image/jpeg,image/png" />
+          <div class="upload-icon">📎</div>
+          <div class="upload-label">クリックまたはドラッグ＆ドロップ</div>
+          <div class="upload-sub">JPG / PNG（推奨：正方形 or 縦長）</div>
+          <div class="file-name" id="flyerFileName"></div>
+        </div>
+        <span class="error-msg" id="err-flyerFile">チラシ画像をアップロードしてください</span>
+      </div>
+
+      <div class="field">
+        <label>動画 <span class="badge-optional">任意</span></label>
+        <div class="field-hint">👉 練習動画・PR動画など。ファイルアップロードまたはURLどちらでも可。</div>
+        <div class="video-wrap">
+          <div class="upload-zone" id="videoZone">
+            <input type="file" id="videoFile" name="videoFile" accept="video/*" />
+            <div class="upload-icon">🎬</div>
+            <div class="upload-label">動画ファイルをアップロード</div>
+            <div class="upload-sub">MP4 / MOV など</div>
+            <div class="file-name" id="videoFileName"></div>
+          </div>
+          <div class="or-divider">または</div>
+          <input type="url" id="videoUrl" name="videoUrl" placeholder="動画URL（YouTube・Vimeo など）" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ⑤ 確認事項 -->
+  <div class="form-card">
+    <div class="section-header">
+      <span class="icon">✅</span>
+      <h2>セクション⑤ 確認事項</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="consent-box" id="consentBox">
+          <label class="consent-label">
+            <input type="checkbox" id="consent" name="consent" />
+            コマキ楽器公式SNSへの掲載に同意します
+          </label>
+          <p class="consent-note">
+            ご提供いただいた情報・画像・動画は、コマキ楽器公式Instagramおよびその他公式SNSでの告知目的のみに使用します。掲載内容について事前確認のご連絡をする場合があります。
+          </p>
+        </div>
+        <span class="error-msg" id="err-consent">掲載許可にチェックを入れてください</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 送信ボタン -->
+  <div class="submit-wrap">
+    <button type="submit" class="btn-submit">送信する</button>
+    <p class="submit-note">送信後、担当者よりご連絡差し上げます（営業日3日以内）</p>
+  </div>
+
+</form>
+
+<!-- 送信完了バナー -->
+<div class="success-banner" id="successBanner">
+  <div class="s-icon">🎉</div>
+  <h3>お申し込みを受け付けました！</h3>
+  <p>ご記入ありがとうございます。<br>担当者より <strong>3営業日以内</strong> にご登録のメールアドレスへご連絡いたします。</p>
+</div>
+
+<script>
+  // ---- 文字カウンター ----
+  function initCounter(inputId, counterId, max) {
+    const el = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    el.addEventListener('input', () => {
+      const len = el.value.length;
+      const label = max ? `${len} / ${max}文字` : `${len} 文字`;
+      counter.textContent = label;
+      counter.className = 'char-counter';
+      if (max) {
+        if (len > max) counter.classList.add('over');
+        else if (len > max * 0.8) counter.classList.add('warn');
+      }
+    });
+  }
+  initCounter('catchcopy', 'cc-catchcopy', 30);
+  initCounter('description', 'cc-description', null);
+
+  // ---- ファイルアップロード表示 ----
+  function initUpload(inputId, nameId, zoneId) {
+    const input = document.getElementById(inputId);
+    const nameEl = document.getElementById(nameId);
+    const zone = document.getElementById(zoneId);
+    input.addEventListener('change', () => {
+      if (input.files[0]) {
+        nameEl.textContent = '📄 ' + input.files[0].name;
+        nameEl.style.display = 'block';
+      }
+    });
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        nameEl.textContent = '📄 ' + file.name;
+        nameEl.style.display = 'block';
+      }
+    });
+  }
+  initUpload('flyerFile', 'flyerFileName', 'flyerZone');
+  initUpload('videoFile', 'videoFileName', 'videoZone');
+
+  // ---- バリデーション ----
+  function setError(fieldId, errId, show) {
+    const field = document.getElementById(fieldId);
+    const err = document.getElementById(errId);
+    if (show) {
+      field.classList.add('error');
+      err.style.display = 'block';
+    } else {
+      field.classList.remove('error');
+      err.style.display = 'none';
+    }
+    return show;
+  }
+
+  function validateForm() {
+    let hasError = false;
+
+    // 必須テキスト系
+    const required = [
+      ['orgName', 'err-orgName'],
+      ['contactName', 'err-contactName'],
+      ['instagram', 'err-instagram'],
+      ['concertTitle', 'err-concertTitle'],
+      ['concertDate', 'err-concertDate'],
+      ['concertTime', 'err-concertTime'],
+      ['venue', 'err-venue'],
+      ['ticket', 'err-ticket'],
+    ];
+    required.forEach(([id, errId]) => {
+      if (setError(id, errId, !document.getElementById(id).value.trim())) hasError = true;
+    });
+
+    // メール
+    const emailVal = document.getElementById('email').value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+    if (setError('email', 'err-email', !emailOk)) hasError = true;
+
+    // キャッチコピー（必須＋30文字以内）
+    const cc = document.getElementById('catchcopy').value.trim();
+    if (setError('catchcopy', 'err-catchcopy', !cc || cc.length > 30)) hasError = true;
+
+    // 紹介文（必須＋100文字以上）
+    const desc = document.getElementById('description').value.trim();
+    if (setError('description', 'err-description', desc.length < 100)) hasError = true;
+
+    // チラシ（必須）
+    const flyer = document.getElementById('flyerFile');
+    const flyerErr = !flyer.files || flyer.files.length === 0;
+    document.getElementById('err-flyerFile').style.display = flyerErr ? 'block' : 'none';
+    document.getElementById('flyerZone').style.borderColor = flyerErr ? '#e74c3c' : '';
+    if (flyerErr) hasError = true;
+
+    // 同意チェックボックス
+    const consent = document.getElementById('consent');
+    const consentErr = !consent.checked;
+    document.getElementById('err-consent').style.display = consentErr ? 'block' : 'none';
+    document.getElementById('consentBox').style.borderColor = consentErr ? '#e74c3c' : '';
+    if (consentErr) hasError = true;
+
+    return !hasError;
+  }
+
+  // ---- Google Form 設定 ----
+  // ↓ Google FormのURLと各フィールドのentry IDをここに設定してください
+  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeARjbitesTfDowUvqxw3BIp7lZLU7SERBfeIjtSaKRmOcdCQ/viewform';
+  const ENTRY = {
+    orgName:       'entry.1001118916',  // ①団体名
+    contactName:   'entry.279879194',   // ②担当者名
+    email:         'entry.1306064486',  // ③メールアドレス
+    instagram:     'entry.1468760368',  // ④Instagramアカウント
+    concertTitle:  'entry.1004036454',  // ⑤公演タイトル
+    concertDate:   'entry.437887135',   // ⑥開催日
+    concertTime:   'entry.1293107358',  // ⑦開演時間
+    venue:         'entry.2121098686',  // ⑧会場名
+    ticket:        'entry.806513913',   // ⑨チケット情報
+    catchcopy:     'entry.661541948',   // ⑩キャッチコピー
+    description:   'entry.615418710',   // ⑪見どころ・紹介文
+    program:       'entry.189642835',   // ⑫プログラム内容
+    audience:      'entry.274714417',   // ⑬こんな方におすすめ
+    videoUrl:      'entry.1617306767',  // ⑮動画URL
+  };
+
+  // ---- 送信 ----
+  document.getElementById('concertForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!validateForm()) {
+      const firstErr = document.querySelector('.error, [style*="block"]');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // 未設定チェック（開発時のガード）
+    if (GOOGLE_FORM_URL.includes('YOUR_FORM_ID')) {
+      alert('Google FormのURLをまだ設定していません。\nindex.html の GOOGLE_FORM_URL を更新してください。');
+      return;
+    }
+
+    // プリフィルURLを組み立ててGoogle Formを新タブで開く
+    const val = id => encodeURIComponent(document.getElementById(id).value.trim());
+    const params = Object.entries(ENTRY)
+      .map(([key, entryId]) => `${entryId}=${val(key)}`)
+      .join('&');
+
+    window.open(`${GOOGLE_FORM_URL}?${params}&usp=pp_url`, '_blank');
+
+    // 完了バナーを表示
+    document.getElementById('concertForm').style.display = 'none';
+    const banner = document.getElementById('successBanner');
+    banner.style.display = 'block';
+    banner.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ---- リアルタイムエラー解除 ----
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      const errEl = document.getElementById('err-' + el.id);
+      if (errEl) errEl.style.display = 'none';
+    });
+  });
+</script>
+</body>
+</html>

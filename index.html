@@ -417,10 +417,10 @@
         <label>チラシ画像 <span class="badge-required">必須</span></label>
         <div class="field-hint">形式：JPG / PNG　推奨：正方形または縦長</div>
         <div class="upload-zone" id="flyerZone">
-          <input type="file" id="flyerFile" name="flyerFile" accept="image/jpeg,image/png" />
+          <input type="file" id="flyerFile" name="flyerFile" accept="image/jpeg,image/png" multiple />
           <div class="upload-icon">📎</div>
           <div class="upload-label">クリックまたはドラッグ＆ドロップ</div>
-          <div class="upload-sub">JPG / PNG（推奨：正方形 or 縦長）</div>
+          <div class="upload-sub">JPG / PNG　最大5枚まで選択可</div>
           <div class="file-name" id="flyerFileName"></div>
         </div>
         <span class="error-msg" id="err-flyerFile">チラシ画像をアップロードしてください</span>
@@ -529,7 +529,33 @@
       }
     });
   }
-  initUpload('flyerFile', 'flyerFileName', 'flyerZone');
+  // チラシは複数対応
+  (function() {
+    const input = document.getElementById('flyerFile');
+    const nameEl = document.getElementById('flyerFileName');
+    const zone = document.getElementById('flyerZone');
+    function showFiles(files) {
+      if (!files || files.length === 0) { nameEl.style.display = 'none'; return; }
+      if (files.length > 5) {
+        alert('画像は5枚までアップロードできます。');
+        input.value = '';
+        nameEl.style.display = 'none';
+        return;
+      }
+      nameEl.innerHTML = Array.from(files).map(f => `📄 ${f.name}`).join('<br>');
+      nameEl.style.display = 'block';
+    }
+    input.addEventListener('change', () => showFiles(input.files));
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('drag');
+      const dt = new DataTransfer();
+      Array.from(e.dataTransfer.files).slice(0, 5).forEach(f => dt.items.add(f));
+      input.files = dt.files;
+      showFiles(input.files);
+    });
+  })();
   initUpload('videoFile', 'videoFileName', 'videoZone');
 
   // ---- バリデーション ----

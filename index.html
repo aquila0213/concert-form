@@ -594,28 +594,12 @@
     return !hasError;
   }
 
-  // ---- Google Form 設定 ----
-  // ↓ Google FormのURLと各フィールドのentry IDをここに設定してください
-  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeARjbitesTfDowUvqxw3BIp7lZLU7SERBfeIjtSaKRmOcdCQ/viewform';
-  const ENTRY = {
-    orgName:       'entry.1001118916',  // ①団体名
-    contactName:   'entry.279879194',   // ②担当者名
-    email:         'entry.1306064486',  // ③メールアドレス
-    instagram:     'entry.1468760368',  // ④Instagramアカウント
-    concertTitle:  'entry.1004036454',  // ⑤公演タイトル
-    concertDate:   'entry.437887135',   // ⑥開催日
-    concertTime:   'entry.1293107358',  // ⑦開演時間
-    venue:         'entry.2121098686',  // ⑧会場名
-    ticket:        'entry.806513913',   // ⑨チケット情報
-    catchcopy:     'entry.661541948',   // ⑩キャッチコピー
-    description:   'entry.615418710',   // ⑪見どころ・紹介文
-    program:       'entry.189642835',   // ⑫プログラム内容
-    audience:      'entry.274714417',   // ⑬こんな方におすすめ
-    videoUrl:      'entry.1617306767',  // ⑮動画URL
-  };
+  // ---- Apps Script 設定 ----
+  // ↓ デプロイ後のWeb App URLをここに設定してください
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzdGDuh3ud39A-wVA73rZ95AmRWU7hopqi49QmDOo51tupp4ZHJ1sD6-y0S3k6SKnI2w/exec';
 
   // ---- 送信 ----
-  document.getElementById('concertForm').addEventListener('submit', function(e) {
+  document.getElementById('concertForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!validateForm()) {
       const firstErr = document.querySelector('.error, [style*="block"]');
@@ -623,25 +607,47 @@
       return;
     }
 
-    // 未設定チェック（開発時のガード）
-    if (GOOGLE_FORM_URL.includes('YOUR_FORM_ID')) {
-      alert('Google FormのURLをまだ設定していません。\nindex.html の GOOGLE_FORM_URL を更新してください。');
+    if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL') {
+      alert('Apps ScriptのURLをまだ設定していません。');
       return;
     }
 
-    // プリフィルURLを組み立ててGoogle Formを新タブで開く
-    const val = id => encodeURIComponent(document.getElementById(id).value.trim());
-    const params = Object.entries(ENTRY)
-      .map(([key, entryId]) => `${entryId}=${val(key)}`)
-      .join('&');
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = '送信中...';
+    btn.disabled = true;
 
-    window.open(`${GOOGLE_FORM_URL}?${params}&usp=pp_url`, '_blank');
+    const val = id => document.getElementById(id).value.trim();
+    const data = {
+      orgName:      val('orgName'),
+      contactName:  val('contactName'),
+      email:        val('email'),
+      instagram:    val('instagram'),
+      concertTitle: val('concertTitle'),
+      concertDate:  val('concertDate'),
+      concertTime:  val('concertTime'),
+      venue:        val('venue'),
+      ticket:       val('ticket'),
+      catchcopy:    val('catchcopy'),
+      description:  val('description'),
+      program:      val('program'),
+      audience:     val('audience'),
+      videoUrl:     val('videoUrl'),
+    };
 
-    // 完了バナーを表示
-    document.getElementById('concertForm').style.display = 'none';
-    const banner = document.getElementById('successBanner');
-    banner.style.display = 'block';
-    banner.scrollIntoView({ behavior: 'smooth' });
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+      document.getElementById('concertForm').style.display = 'none';
+      const banner = document.getElementById('successBanner');
+      banner.style.display = 'block';
+      banner.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      btn.textContent = '送信する';
+      btn.disabled = false;
+      alert('送信に失敗しました。もう一度お試しください。');
+    }
   });
 
   // ---- リアルタイムエラー解除 ----

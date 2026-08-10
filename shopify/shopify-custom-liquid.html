@@ -1,28 +1,21 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Instagram掲載申込フォーム｜JPC（Japan Percussion Center）</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .jpc-concert-form, .jpc-concert-form *, .jpc-concert-form *::before, .jpc-concert-form *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
+    .jpc-concert-form {
       font-family: "Hiragino Sans", "Yu Gothic UI", sans-serif;
       background: #f3f5fb;
       color: #1f2430;
-      min-height: 100vh;
       padding: 40px 16px 80px;
     }
 
-    .page-header {
+    .jpc-concert-form .page-header {
       text-align: center;
       margin-bottom: 36px;
       max-width: 760px;
       margin-left: auto;
       margin-right: auto;
     }
-    .page-header .logo {
+    .jpc-concert-form .page-header .logo {
       font-size: 13px;
       font-weight: 700;
       letter-spacing: .16em;
@@ -30,19 +23,19 @@
       text-transform: uppercase;
       margin-bottom: 10px;
     }
-    .page-header h1 {
+    .jpc-concert-form .page-header h1 {
       font-size: 24px;
       font-weight: 800;
       line-height: 1.4;
       margin-bottom: 8px;
     }
-    .page-header p {
+    .jpc-concert-form .page-header p {
       font-size: 14px;
       color: #4b5563;
       line-height: 1.8;
     }
 
-    .form-card {
+    .jpc-concert-form .form-card {
       background: #fff;
       border-radius: 18px;
       box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
@@ -52,23 +45,23 @@
       border: 1px solid #e5e7eb;
     }
 
-    .section-header {
+    .jpc-concert-form .section-header {
       padding: 20px 24px;
       display: flex;
       align-items: center;
       gap: 10px;
       border-bottom: 1px solid #eef2f7;
     }
-    .section-header.public { background: linear-gradient(90deg, #eff6ff, #f8fbff); }
-    .section-header.private { background: linear-gradient(90deg, #fdf2f8, #fff7fb); }
-    .section-header.confirm { background: linear-gradient(90deg, #f0fdf4, #f8fff9); }
-    .section-header .icon { font-size: 18px; }
-    .section-header h2 {
+    .jpc-concert-form .section-header.public { background: linear-gradient(90deg, #eff6ff, #f8fbff); }
+    .jpc-concert-form .section-header.private { background: linear-gradient(90deg, #fdf2f8, #fff7fb); }
+    .jpc-concert-form .section-header.confirm { background: linear-gradient(90deg, #f0fdf4, #f8fff9); }
+    .jpc-concert-form .section-header .icon { font-size: 18px; }
+    .jpc-concert-form .section-header h2 {
       font-size: 16px;
       font-weight: 800;
       letter-spacing: .03em;
     }
-    .section-label {
+    .jpc-concert-form .section-label {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -80,18 +73,18 @@
       margin-left: auto;
       text-transform: uppercase;
     }
-    .section-label.public { background: #dbeafe; color: #1d4ed8; }
-    .section-label.private { background: #fce7f3; color: #be185d; }
-    .section-label.confirm { background: #dcfce7; color: #15803d; }
+    .jpc-concert-form .section-label.public { background: #dbeafe; color: #1d4ed8; }
+    .jpc-concert-form .section-label.private { background: #fce7f3; color: #be185d; }
+    .jpc-concert-form .section-label.confirm { background: #dcfce7; color: #15803d; }
 
-    .section-body {
+    .jpc-concert-form .section-body {
       padding: 24px;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    .section-note {
+    .jpc-concert-form .section-note {
       font-size: 13px;
       line-height: 1.8;
       color: #4b5563;
@@ -101,16 +94,16 @@
       border: 1px solid #e5e7eb;
     }
 
-    .field { display: flex; flex-direction: column; gap: 7px; }
-    .field.error input,
-    .field.error textarea,
-    .field.error .upload-zone,
-    .field.error .consent-box {
+    .jpc-concert-form .field { display: flex; flex-direction: column; gap: 7px; }
+    .jpc-concert-form .field.error input,
+    .jpc-concert-form .field.error textarea,
+    .jpc-concert-form .field.error .upload-zone,
+    .jpc-concert-form .field.error .consent-box {
       border-color: #ef4444 !important;
       background: #fef2f2;
     }
 
-    .field label {
+    .jpc-concert-form .field label {
       font-size: 14px;
       font-weight: 700;
       display: flex;
@@ -118,7 +111,7 @@
       gap: 6px;
       flex-wrap: wrap;
     }
-    .badge-required {
+    .jpc-concert-form .badge-required {
       font-size: 10px;
       font-weight: 800;
       background: #ef4444;
@@ -127,7 +120,7 @@
       border-radius: 4px;
       letter-spacing: .06em;
     }
-    .badge-optional {
+    .jpc-concert-form .badge-optional {
       font-size: 10px;
       font-weight: 700;
       background: #e5e7eb;
@@ -135,7 +128,7 @@
       padding: 2px 7px;
       border-radius: 4px;
     }
-    .badge-public {
+    .jpc-concert-form .badge-public {
       font-size: 10px;
       font-weight: 700;
       background: #dbeafe;
@@ -143,7 +136,7 @@
       padding: 2px 7px;
       border-radius: 4px;
     }
-    .badge-private {
+    .jpc-concert-form .badge-private {
       font-size: 10px;
       font-weight: 700;
       background: #fce7f3;
@@ -151,7 +144,7 @@
       padding: 2px 7px;
       border-radius: 4px;
     }
-    .field-hint {
+    .jpc-concert-form .field-hint {
       font-size: 12px;
       color: #6b7280;
       line-height: 1.7;
@@ -160,13 +153,13 @@
       gap: 4px;
     }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="date"],
-    input[type="time"],
-    input[type="tel"],
-    input[type="url"],
-    textarea {
+    .jpc-concert-form input[type="text"],
+    .jpc-concert-form input[type="email"],
+    .jpc-concert-form input[type="date"],
+    .jpc-concert-form input[type="time"],
+    .jpc-concert-form input[type="tel"],
+    .jpc-concert-form input[type="url"],
+    .jpc-concert-form textarea {
       width: 100%;
       border: 1.5px solid #d1d5db;
       border-radius: 10px;
@@ -178,24 +171,24 @@
       transition: border-color .2s, background .2s;
       outline: none;
     }
-    input:focus, textarea:focus {
+    .jpc-concert-form input:focus, .jpc-concert-form textarea:focus {
       border-color: #2563eb;
       background: #fff;
     }
-    textarea { resize: vertical; min-height: 102px; line-height: 1.7; }
+    .jpc-concert-form textarea { resize: vertical; min-height: 102px; line-height: 1.7; }
 
-    .char-counter {
+    .jpc-concert-form .char-counter {
       font-size: 12px;
       color: #9ca3af;
       text-align: right;
     }
-    .char-counter.warn { color: #e67e22; }
-    .char-counter.over { color: #ef4444; font-weight: 700; }
+    .jpc-concert-form .char-counter.warn { color: #e67e22; }
+    .jpc-concert-form .char-counter.over { color: #ef4444; font-weight: 700; }
 
-    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .jpc-concert-form .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .jpc-concert-form .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-    .subsection {
+    .jpc-concert-form .subsection {
       border: 1px solid #e5e7eb;
       background: #fcfdff;
       border-radius: 14px;
@@ -204,13 +197,13 @@
       flex-direction: column;
       gap: 14px;
     }
-    .subsection h3 {
+    .jpc-concert-form .subsection h3 {
       font-size: 14px;
       font-weight: 700;
       color: #374151;
     }
 
-    .upload-zone {
+    .jpc-concert-form .upload-zone {
       border: 2px dashed #cbd5e1;
       border-radius: 12px;
       padding: 28px 20px;
@@ -220,15 +213,15 @@
       background: #fafafa;
       position: relative;
     }
-    .upload-zone:hover, .upload-zone.drag { border-color: #2563eb; background: #eff6ff; }
-    .upload-zone input[type="file"] {
+    .jpc-concert-form .upload-zone:hover, .jpc-concert-form .upload-zone.drag { border-color: #2563eb; background: #eff6ff; }
+    .jpc-concert-form .upload-zone input[type="file"] {
       position: absolute; inset: 0; opacity: 0; cursor: pointer;
       width: 100%; height: 100%; border: none; padding: 0;
     }
-    .upload-zone .upload-icon { font-size: 32px; margin-bottom: 8px; }
-    .upload-zone .upload-label { font-size: 14px; font-weight: 700; color: #4b5563; }
-    .upload-zone .upload-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
-    .file-name {
+    .jpc-concert-form .upload-zone .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .jpc-concert-form .upload-zone .upload-label { font-size: 14px; font-weight: 700; color: #4b5563; }
+    .jpc-concert-form .upload-zone .upload-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+    .jpc-concert-form .file-name {
       font-size: 13px;
       color: #2563eb;
       margin-top: 8px;
@@ -236,8 +229,8 @@
       display: none;
     }
 
-    .video-wrap { display: flex; flex-direction: column; gap: 10px; }
-    .or-divider {
+    .jpc-concert-form .video-wrap { display: flex; flex-direction: column; gap: 10px; }
+    .jpc-concert-form .or-divider {
       text-align: center;
       font-size: 12px;
       color: #9ca3af;
@@ -245,7 +238,7 @@
       letter-spacing: .06em;
       position: relative;
     }
-    .or-divider::before, .or-divider::after {
+    .jpc-concert-form .or-divider::before, .jpc-concert-form .or-divider::after {
       content: "";
       position: absolute;
       top: 50%;
@@ -253,10 +246,10 @@
       height: 1px;
       background: #e5e7eb;
     }
-    .or-divider::before { left: 0; }
-    .or-divider::after { right: 0; }
+    .jpc-concert-form .or-divider::before { left: 0; }
+    .jpc-concert-form .or-divider::after { right: 0; }
 
-    .consent-box {
+    .jpc-concert-form .consent-box {
       border: 1.5px solid #d1d5db;
       border-radius: 12px;
       padding: 16px 16px 12px;
@@ -265,7 +258,7 @@
       flex-direction: column;
       gap: 10px;
     }
-    .consent-label {
+    .jpc-concert-form .consent-label {
       display: flex;
       align-items: flex-start;
       gap: 10px;
@@ -274,7 +267,7 @@
       font-weight: 700;
       line-height: 1.6;
     }
-    .consent-label input[type="checkbox"] {
+    .jpc-concert-form .consent-label input[type="checkbox"] {
       width: 18px;
       height: 18px;
       accent-color: #2563eb;
@@ -282,25 +275,25 @@
       margin-top: 2px;
       cursor: pointer;
     }
-    .consent-note {
+    .jpc-concert-form .consent-note {
       font-size: 12px;
       color: #6b7280;
       line-height: 1.7;
       padding-left: 28px;
     }
 
-    .error-msg {
+    .jpc-concert-form .error-msg {
       font-size: 12px;
       color: #ef4444;
       display: none;
     }
 
-    .submit-wrap {
+    .jpc-concert-form .submit-wrap {
       max-width: 760px;
       margin: 0 auto;
       text-align: center;
     }
-    .btn-submit {
+    .jpc-concert-form .btn-submit {
       background: linear-gradient(135deg, #2563eb, #7c3aed);
       color: #fff;
       border: none;
@@ -316,9 +309,9 @@
       width: 100%;
       max-width: 360px;
     }
-    .btn-submit:hover { opacity: .92; transform: translateY(-1px); }
-    .btn-submit:active { transform: translateY(0); }
-    .btn-submit .sub-text {
+    .jpc-concert-form .btn-submit:hover { opacity: .92; transform: translateY(-1px); }
+    .jpc-concert-form .btn-submit:active { transform: translateY(0); }
+    .jpc-concert-form .btn-submit .sub-text {
       display: block;
       font-size: 11px;
       font-weight: 600;
@@ -327,13 +320,13 @@
       opacity: .85;
     }
 
-    .submit-note {
+    .jpc-concert-form .submit-note {
       font-size: 12px;
       color: #6b7280;
       margin-top: 12px;
     }
 
-    .success-banner {
+    .jpc-concert-form .success-banner {
       display: none;
       background: #f0fdf4;
       border: 2px solid #22c55e;
@@ -343,18 +336,18 @@
       max-width: 760px;
       margin: 0 auto;
     }
-    .success-banner .s-icon { font-size: 40px; margin-bottom: 10px; }
-    .success-banner h3 { font-size: 18px; font-weight: 800; color: #166534; margin-bottom: 6px; }
-    .success-banner p { font-size: 14px; color: #4b5563; line-height: 1.8; }
+    .jpc-concert-form .success-banner .s-icon { font-size: 40px; margin-bottom: 10px; }
+    .jpc-concert-form .success-banner h3 { font-size: 18px; font-weight: 800; color: #166534; margin-bottom: 6px; }
+    .jpc-concert-form .success-banner p { font-size: 14px; color: #4b5563; line-height: 1.8; }
 
     @media (max-width: 720px) {
-      .row-2, .row-3 { grid-template-columns: 1fr; }
-      .section-body { padding: 20px; }
-      .btn-submit { padding: 15px 28px; font-size: 15px; }
+      .jpc-concert-form .row-2, .jpc-concert-form .row-3 { grid-template-columns: 1fr; }
+      .jpc-concert-form .section-body { padding: 20px; }
+      .jpc-concert-form .btn-submit { padding: 15px 28px; font-size: 15px; }
     }
   </style>
-</head>
-<body>
+
+<div class="jpc-concert-form">
 
 <div class="page-header">
   <div class="logo">Japan Percussion Center</div>
@@ -576,7 +569,10 @@
   <p>ご入力いただいたメールアドレスに確認メールをお送りしました。内容を確認して掲載を進めますので、少々お待ちください。掲載内容について確認したいことがあるときだけ、JPCからご連絡することがあります。</p>
 </div>
 
+</div>
+
 <script>
+(function() {
   function initCounter(inputId, counterId, max) {
     const el = document.getElementById(inputId);
     const counter = document.getElementById(counterId);
@@ -885,7 +881,7 @@
     }
   });
 
-  document.querySelectorAll('input, textarea').forEach(el => {
+  document.querySelectorAll('#concertForm input, #concertForm textarea').forEach(el => {
     el.addEventListener('input', () => {
       const fieldId = `field-${el.id}`;
       const field = document.getElementById(fieldId);
@@ -894,6 +890,5 @@
       if (errEl) errEl.style.display = 'none';
     });
   });
+})();
 </script>
-</body>
-</html>

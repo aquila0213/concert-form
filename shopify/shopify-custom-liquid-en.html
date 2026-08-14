@@ -1,0 +1,894 @@
+  <style>
+    .jpc-concert-form, .jpc-concert-form *, .jpc-concert-form *::before, .jpc-concert-form *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .jpc-concert-form {
+      font-family: "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      background: #f3f5fb;
+      color: #1f2430;
+      padding: 40px 16px 80px;
+    }
+
+    .jpc-concert-form .page-header {
+      text-align: center;
+      margin-bottom: 36px;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .jpc-concert-form .page-header .logo {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      color: #6b7280;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .jpc-concert-form .page-header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .jpc-concert-form .page-header p {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+
+    .jpc-concert-form .form-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      max-width: 760px;
+      margin: 0 auto 24px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .jpc-concert-form .section-header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #eef2f7;
+    }
+    .jpc-concert-form .section-header.public { background: linear-gradient(90deg, #eff6ff, #f8fbff); }
+    .jpc-concert-form .section-header.private { background: linear-gradient(90deg, #fdf2f8, #fff7fb); }
+    .jpc-concert-form .section-header.confirm { background: linear-gradient(90deg, #f0fdf4, #f8fff9); }
+    .jpc-concert-form .section-header .icon { font-size: 18px; }
+    .jpc-concert-form .section-header h2 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .03em;
+    }
+    .jpc-concert-form .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin-left: auto;
+      text-transform: uppercase;
+    }
+    .jpc-concert-form .section-label.public { background: #dbeafe; color: #1d4ed8; }
+    .jpc-concert-form .section-label.private { background: #fce7f3; color: #be185d; }
+    .jpc-concert-form .section-label.confirm { background: #dcfce7; color: #15803d; }
+
+    .jpc-concert-form .section-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .jpc-concert-form .section-note {
+      font-size: 13px;
+      line-height: 1.8;
+      color: #4b5563;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .jpc-concert-form .field { display: flex; flex-direction: column; gap: 7px; }
+    .jpc-concert-form .field.error input,
+    .jpc-concert-form .field.error textarea,
+    .jpc-concert-form .field.error .upload-zone,
+    .jpc-concert-form .field.error .consent-box {
+      border-color: #ef4444 !important;
+      background: #fef2f2;
+    }
+
+    .jpc-concert-form .field label {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .jpc-concert-form .badge-required {
+      font-size: 10px;
+      font-weight: 800;
+      background: #ef4444;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: .06em;
+    }
+    .jpc-concert-form .badge-optional {
+      font-size: 10px;
+      font-weight: 700;
+      background: #e5e7eb;
+      color: #6b7280;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .jpc-concert-form .badge-public {
+      font-size: 10px;
+      font-weight: 700;
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .jpc-concert-form .badge-private {
+      font-size: 10px;
+      font-weight: 700;
+      background: #fce7f3;
+      color: #be185d;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .jpc-concert-form .field-hint {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.7;
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .jpc-concert-form input[type="text"],
+    .jpc-concert-form input[type="email"],
+    .jpc-concert-form input[type="date"],
+    .jpc-concert-form input[type="time"],
+    .jpc-concert-form input[type="tel"],
+    .jpc-concert-form input[type="url"],
+    .jpc-concert-form textarea {
+      width: 100%;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #1f2430;
+      background: #fcfdff;
+      transition: border-color .2s, background .2s;
+      outline: none;
+    }
+    .jpc-concert-form input:focus, .jpc-concert-form textarea:focus {
+      border-color: #2563eb;
+      background: #fff;
+    }
+    .jpc-concert-form textarea { resize: vertical; min-height: 102px; line-height: 1.7; }
+
+    .jpc-concert-form .char-counter {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: right;
+    }
+    .jpc-concert-form .char-counter.warn { color: #e67e22; }
+    .jpc-concert-form .char-counter.over { color: #ef4444; font-weight: 700; }
+
+    .jpc-concert-form .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .jpc-concert-form .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    .jpc-concert-form .subsection {
+      border: 1px solid #e5e7eb;
+      background: #fcfdff;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .jpc-concert-form .subsection h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .jpc-concert-form .upload-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      background: #fafafa;
+      position: relative;
+    }
+    .jpc-concert-form .upload-zone:hover, .jpc-concert-form .upload-zone.drag { border-color: #2563eb; background: #eff6ff; }
+    .jpc-concert-form .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      width: 100%; height: 100%; border: none; padding: 0;
+    }
+    .jpc-concert-form .upload-zone .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .jpc-concert-form .upload-zone .upload-label { font-size: 14px; font-weight: 700; color: #4b5563; }
+    .jpc-concert-form .upload-zone .upload-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+    .jpc-concert-form .file-name {
+      font-size: 13px;
+      color: #2563eb;
+      margin-top: 8px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .jpc-concert-form .video-wrap { display: flex; flex-direction: column; gap: 10px; }
+    .jpc-concert-form .or-divider {
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 700;
+      letter-spacing: .06em;
+      position: relative;
+    }
+    .jpc-concert-form .or-divider::before, .jpc-concert-form .or-divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    .jpc-concert-form .or-divider::before { left: 0; }
+    .jpc-concert-form .or-divider::after { right: 0; }
+
+    .jpc-concert-form .consent-box {
+      border: 1.5px solid #d1d5db;
+      border-radius: 12px;
+      padding: 16px 16px 12px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .jpc-concert-form .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+    .jpc-concert-form .consent-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #2563eb;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+    .jpc-concert-form .consent-note {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.7;
+      padding-left: 28px;
+    }
+
+    .jpc-concert-form .error-msg {
+      font-size: 12px;
+      color: #ef4444;
+      display: none;
+    }
+
+    .jpc-concert-form .submit-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .jpc-concert-form .btn-submit {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 56px;
+      font-size: 16px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      letter-spacing: .06em;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, .25);
+      transition: opacity .2s, transform .15s;
+      width: 100%;
+      max-width: 360px;
+    }
+    .jpc-concert-form .btn-submit:hover { opacity: .92; transform: translateY(-1px); }
+    .jpc-concert-form .btn-submit:active { transform: translateY(0); }
+    .jpc-concert-form .btn-submit .sub-text {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0;
+      margin-top: 4px;
+      opacity: .85;
+    }
+
+    .jpc-concert-form .submit-note {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 12px;
+    }
+
+    .jpc-concert-form .success-banner {
+      display: none;
+      background: #f0fdf4;
+      border: 2px solid #22c55e;
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .jpc-concert-form .success-banner .s-icon { font-size: 40px; margin-bottom: 10px; }
+    .jpc-concert-form .success-banner h3 { font-size: 18px; font-weight: 800; color: #166534; margin-bottom: 6px; }
+    .jpc-concert-form .success-banner p { font-size: 14px; color: #4b5563; line-height: 1.8; }
+
+    @media (max-width: 720px) {
+      .jpc-concert-form .row-2, .jpc-concert-form .row-3 { grid-template-columns: 1fr; }
+      .jpc-concert-form .section-body { padding: 20px; }
+      .jpc-concert-form .btn-submit { padding: 15px 28px; font-size: 15px; }
+    }
+  </style>
+
+<div class="jpc-concert-form">
+
+<div class="page-header">
+  <div class="logo">Japan Percussion Center</div>
+  <h1>🎵 Instagram Concert Feature Request Form</h1>
+  <p>If you would like your concert to be considered for a feature on JPC's official Instagram, please submit your concert information using this form.</p>
+</div>
+
+<form id="concertForm" novalidate>
+
+  <div class="form-card">
+    <div class="section-header public">
+      <span class="icon">📣</span>
+      <h2>① Concert Information for Instagram Posting</h2>
+      <span class="section-label public">Public</span>
+    </div>
+    <div class="section-body">
+      <div class="section-note">
+        The information you enter below may be published on JPC's official Instagram and other official social media accounts. Please enter only information that may be shared publicly.
+      </div>
+
+      <div class="field" id="field-concertTitle">
+        <label for="concertTitle">Concert Title <span class="badge-required">Required</span></label>
+        <input type="text" id="concertTitle" name="concertTitle" placeholder="e.g. Spring Chamber Music Concert 2026" />
+        <span class="error-msg" id="err-concertTitle">Please enter a concert title</span>
+      </div>
+
+      <div class="row-3">
+        <div class="field" id="field-concertDate">
+          <label for="concertDate">Date <span class="badge-required">Required</span></label>
+          <input type="date" id="concertDate" name="concertDate" />
+          <span class="error-msg" id="err-concertDate">Please select a date</span>
+        </div>
+        <div class="field" id="field-openTime">
+          <label for="openTime">Doors Open <span class="badge-required">Required</span></label>
+          <input type="time" id="openTime" name="openTime" />
+          <span class="error-msg" id="err-openTime">Please select a doors-open time</span>
+        </div>
+        <div class="field" id="field-startTime">
+          <label for="startTime">Performance Starts <span class="badge-required">Required</span></label>
+          <input type="time" id="startTime" name="startTime" />
+          <span class="error-msg" id="err-startTime">Please select a performance start time</span>
+        </div>
+      </div>
+
+      <div class="field" id="field-venue">
+        <label for="venue">Venue <span class="badge-required">Required</span></label>
+        <input type="text" id="venue" name="venue" placeholder="e.g. XX Hall, Main Hall" />
+        <span class="error-msg" id="err-venue">Please enter a venue</span>
+      </div>
+
+      <div class="field" id="field-performers">
+        <label for="performers">Performers <span class="badge-required">Required</span></label>
+        <textarea id="performers" name="performers" rows="3" placeholder="Please list the performers."></textarea>
+        <span class="error-msg" id="err-performers">Please enter the performers</span>
+      </div>
+
+      <div class="field" id="field-program">
+        <label for="program">Program <span class="badge-required">Required</span></label>
+        <textarea id="program" name="program" rows="3" placeholder="Please enter the main works or program."></textarea>
+        <span class="error-msg" id="err-program">Please enter the program</span>
+      </div>
+
+      <div class="field" id="field-ticket">
+        <label for="ticket">Tickets / Admission <span class="badge-required">Required</span></label>
+        <div class="field-hint">e.g. General ¥3,000 / Students ¥2,000 / Free admission / Reservation required / Reserved seating ¥4,000</div>
+        <textarea id="ticket" name="ticket" rows="3" placeholder="Please provide ticket prices, purchasing information, reservation details, etc."></textarea>
+        <span class="error-msg" id="err-ticket">Please enter ticket price / admission details</span>
+      </div>
+
+      <div class="subsection">
+        <h3>Public Contact Information</h3>
+        <div class="field-hint">This information may be included in the Instagram post. Please provide only contact details that may be shared publicly. This section is optional.</div>
+        <div class="field">
+          <label for="inquiryOrg">Organizer <span class="badge-optional">Optional</span></label>
+          <input type="text" id="inquiryOrg" name="inquiryOrg" placeholder="e.g. XX Concert Office" />
+        </div>
+        <div class="field" id="field-inquiryEmail">
+          <label for="inquiryEmail">Email Address <span class="badge-optional">Optional</span></label>
+          <input type="email" id="inquiryEmail" name="inquiryEmail" placeholder="e.g. info@example.jp" />
+          <span class="error-msg" id="err-inquiryEmail">Please enter a valid email address</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="instagram">Instagram Account <span class="badge-optional">Optional</span></label>
+        <div class="field-hint">e.g. @komakimusic</div>
+        <input type="text" id="instagram" name="instagram" placeholder="@username" />
+      </div>
+
+      <div class="field">
+        <label for="catchcopy">Tagline <span class="badge-required">Required</span></label>
+        <div class="field-hint">Please enter up to 100 characters.</div>
+        <input type="text" id="catchcopy" name="catchcopy" placeholder="Enter a short tagline for your concert." maxlength="100" />
+        <div class="char-counter" id="cc-catchcopy">0 / 100 characters</div>
+        <span class="error-msg" id="err-catchcopy">Please enter a tagline of 100 characters or fewer</span>
+      </div>
+
+      <div class="field">
+        <label for="description">Concert Highlights / Description <span class="badge-required">Required</span></label>
+        <div class="field-hint">Please enter up to 300 characters.</div>
+        <textarea id="description" name="description" rows="5" placeholder="Describe the highlights and appeal of your concert." maxlength="300"></textarea>
+        <div class="char-counter" id="cc-description">0 characters</div>
+        <span class="error-msg" id="err-description">Please enter the highlights/description in 300 characters or fewer</span>
+      </div>
+
+      <div class="field" id="field-flyerFile">
+        <label>Flyer Images <span class="badge-required">Required</span></label>
+        <div class="field-hint">Format: JPG / PNG　Recommended: Square or portrait orientation</div>
+        <div class="upload-zone" id="flyerZone">
+          <input type="file" id="flyerFile" name="flyerFile" accept="image/jpeg,image/png" multiple />
+          <div class="upload-icon">📎</div>
+          <div class="upload-label">Click or drag &amp; drop</div>
+          <div class="upload-sub">JPG / PNG, up to 10 MB each, maximum 5 files</div>
+          <div class="file-name" id="flyerFileName"></div>
+        </div>
+        <span class="error-msg" id="err-flyerFile">Please upload a flyer image</span>
+      </div>
+
+      <div class="field">
+        <label>Video <span class="badge-optional">Optional</span></label>
+        <div class="field-hint">If you have a video you would like to be featured on JPC's official Instagram, please upload it here.</div>
+        <div class="video-wrap">
+          <div class="upload-zone" id="videoZone">
+            <input type="file" id="videoFile" name="videoFile" accept="video/mp4,video/quicktime,video/x-mov,video/*" />
+            <div class="upload-icon">🎬</div>
+            <div class="upload-label">Upload a video file</div>
+            <div class="upload-sub">MP4 / MOV, up to 50 MB</div>
+            <div class="file-name" id="videoFileName"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header private">
+      <span class="icon">🔒</span>
+      <h2>② Contact Information [Private]</h2>
+      <span class="section-label private">Private</span>
+    </div>
+    <div class="section-body">
+      <div class="section-note">
+        The information below will be used only by JPC to confirm your submission or contact you if necessary. It will not be published on Instagram or other social media.
+      </div>
+
+      <div class="field" id="field-orgName">
+        <label for="orgName">Organization / Group Name <span class="badge-required">Required</span></label>
+        <input type="text" id="orgName" name="orgName" placeholder="e.g. XX Percussion Ensemble" />
+        <span class="error-msg" id="err-orgName">Please enter your organization or group name</span>
+      </div>
+
+      <div class="field" id="field-contactName">
+        <label for="contactName">Contact Person <span class="badge-required">Required</span></label>
+        <input type="text" id="contactName" name="contactName" placeholder="e.g. Taro Yamada" />
+        <span class="error-msg" id="err-contactName">Please enter the contact person's name</span>
+      </div>
+
+      <div class="field" id="field-email">
+        <label for="email">Email Address <span class="badge-required">Required</span></label>
+        <input type="email" id="email" name="email" placeholder="e.g. info@example.com" />
+        <span class="error-msg" id="err-email">Please enter a valid email address</span>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number <span class="badge-optional">Optional</span></label>
+        <div class="field-hint">This will only be used if we need to contact you urgently regarding your submission.</div>
+        <input type="tel" id="phone" name="phone" placeholder="e.g. 090-0000-0000" />
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="section-header confirm">
+      <span class="icon">✅</span>
+      <h2>③ Confirmation & Agreement</h2>
+      <span class="section-label confirm">Required</span>
+    </div>
+    <div class="section-body">
+      <div class="field" id="field-consent1">
+        <div class="consent-box" id="consentBox1">
+          <label class="consent-label">
+            <input type="checkbox" id="consent1" name="consent1" />
+            <span>
+              I agree to the following regarding this submission:
+              <br>・The concert information I have provided may be posted on JPC's official Instagram.
+              <br>・I have obtained all necessary permissions from the copyright holders, performers, and other relevant parties to allow JPC to post the submitted images and videos on its official social media accounts (*Please make sure you have obtained all necessary permissions before submitting any images or videos. Do not submit any content if the necessary permissions have not been obtained.)
+              <br>・JPC may edit the submitted text or crop images as necessary for publication.
+              <span class="badge-required">Required</span>
+            </span>
+          </label>
+        </div>
+        <span class="error-msg" id="err-consent1">Please agree before submitting</span>
+      </div>
+
+      <div class="field" id="field-consent2">
+        <div class="consent-box" id="consentBox2">
+          <label class="consent-label">
+            <input type="checkbox" id="consent2" name="consent2" />
+            <span>
+              I agree to the <a href="https://komakimusic.co.jp/en/policies/privacy-policy" target="_blank" rel="noopener" onclick="event.stopPropagation()">Privacy Policy</a> and consent to JPC using my name, email address, phone number, and other personal information solely for the purpose of reviewing my submission and contacting me regarding it.
+              <span class="badge-required">Required</span>
+            </span>
+          </label>
+        </div>
+        <span class="error-msg" id="err-consent2">Please agree before submitting</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-wrap">
+    <button type="submit" class="btn-submit">Submit</button>
+    <p class="submit-note">After submission, a JPC staff member may contact you to confirm details.</p>
+  </div>
+</form>
+
+<div class="success-banner" id="successBanner">
+  <div class="s-icon">🎉</div>
+  <h3>Thank you for your submission!</h3>
+  <p>A confirmation email has been sent to the address you provided. We'll review the details and post to Instagram once everything is ready — thanks for your patience. We'll only reach out if we have a question about the content.</p>
+</div>
+
+</div>
+
+<script>
+(function() {
+  function initCounter(inputId, counterId, max) {
+    const el = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    el.addEventListener('input', () => {
+      const len = el.value.length;
+      const label = max ? `${len} / ${max} characters` : `${len} characters`;
+      counter.textContent = label;
+      counter.className = 'char-counter';
+      if (max) {
+        if (len > max) counter.classList.add('over');
+        else if (len > max * 0.8) counter.classList.add('warn');
+      }
+    });
+  }
+  initCounter('catchcopy', 'cc-catchcopy', 100);
+  initCounter('description', 'cc-description', null);
+
+  const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
+  const MAX_IMAGE_COUNT = 5;
+  const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+
+  function showFileSelectionError(message) {
+    alert(message);
+  }
+
+  function validateImageSelection(files) {
+    if (!files || files.length === 0) return true;
+    if (files.length > MAX_IMAGE_COUNT) {
+      showFileSelectionError(`You can upload a maximum of ${MAX_IMAGE_COUNT} flyer images.`);
+      return false;
+    }
+    const oversized = Array.from(files).filter(file => file.size > MAX_IMAGE_SIZE_BYTES);
+    if (oversized.length > 0) {
+      showFileSelectionError('Each flyer image must be 10 MB or smaller.');
+      return false;
+    }
+    return true;
+  }
+
+  function validateVideoSelection(file) {
+    if (!file) return true;
+    if (!file.type.startsWith('video/')) {
+      showFileSelectionError('Please upload a video file (MP4/MOV, etc.).');
+      return false;
+    }
+    if (file.size > MAX_VIDEO_SIZE_BYTES) {
+      showFileSelectionError('Video files must be 50 MB or smaller.');
+      return false;
+    }
+    return true;
+  }
+
+  function initUpload(inputId, nameId, zoneId, validator) {
+    const input = document.getElementById(inputId);
+    const nameEl = document.getElementById(nameId);
+    const zone = document.getElementById(zoneId);
+    function updateSelection(files) {
+      const file = files && files[0] ? files[0] : null;
+      if (!file) {
+        nameEl.style.display = 'none';
+        return;
+      }
+      if (validator && !validator(file)) {
+        input.value = '';
+        nameEl.style.display = 'none';
+        return;
+      }
+      nameEl.textContent = '📄 ' + file.name;
+      nameEl.style.display = 'block';
+    }
+    input.addEventListener('change', () => updateSelection(input.files));
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        updateSelection(input.files);
+      }
+    });
+  }
+
+  (function() {
+    const input = document.getElementById('flyerFile');
+    const nameEl = document.getElementById('flyerFileName');
+    const zone = document.getElementById('flyerZone');
+    function showFiles(files) {
+      if (!files || files.length === 0) {
+        nameEl.style.display = 'none';
+        return;
+      }
+      if (!validateImageSelection(files)) {
+        input.value = '';
+        nameEl.style.display = 'none';
+        return;
+      }
+      nameEl.innerHTML = Array.from(files).map(f => `📄 ${f.name}`).join('<br>');
+      nameEl.style.display = 'block';
+    }
+    input.addEventListener('change', () => showFiles(input.files));
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('drag');
+      const dt = new DataTransfer();
+      Array.from(e.dataTransfer.files).slice(0, MAX_IMAGE_COUNT).forEach(f => dt.items.add(f));
+      input.files = dt.files;
+      showFiles(input.files);
+    });
+  })();
+
+  initUpload('videoFile', 'videoFileName', 'videoZone', file => validateVideoSelection(file));
+
+  function setError(fieldId, errId, show) {
+    const field = document.getElementById(fieldId);
+    const err = document.getElementById(errId);
+    if (field) {
+      if (show) {
+        field.classList.add('error');
+      } else {
+        field.classList.remove('error');
+      }
+    }
+    if (err) {
+      err.style.display = show ? 'block' : 'none';
+    }
+    return show;
+  }
+
+  function validateForm() {
+    let hasError = false;
+
+    const requiredTextFields = [
+      ['concertTitle', 'err-concertTitle'],
+      ['concertDate', 'err-concertDate'],
+      ['openTime', 'err-openTime'],
+      ['startTime', 'err-startTime'],
+      ['venue', 'err-venue'],
+      ['performers', 'err-performers'],
+      ['program', 'err-program'],
+      ['ticket', 'err-ticket'],
+      ['orgName', 'err-orgName'],
+      ['contactName', 'err-contactName'],
+      ['email', 'err-email']
+    ];
+
+    requiredTextFields.forEach(([id, errId]) => {
+      if (setError(`field-${id}`, errId, !document.getElementById(id).value.trim())) hasError = true;
+    });
+
+    const email = document.getElementById('email').value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (setError('field-email', 'err-email', !email || !emailOk)) hasError = true;
+
+    const inquiryEmail = document.getElementById('inquiryEmail').value.trim();
+    const inquiryEmailOk = !inquiryEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inquiryEmail);
+    if (setError('field-inquiryEmail', 'err-inquiryEmail', inquiryEmail && !inquiryEmailOk)) hasError = true;
+
+    const catchcopy = document.getElementById('catchcopy').value.trim();
+    const catchcopyOk = catchcopy.length <= 100;
+    if (setError('catchcopy', 'err-catchcopy', !catchcopyOk)) hasError = true;
+
+    const description = document.getElementById('description').value.trim();
+    const descriptionOk = description.length <= 300;
+    if (setError('description', 'err-description', !descriptionOk)) hasError = true;
+
+    const flyer = document.getElementById('flyerFile');
+    const flyerErr = !flyer.files || flyer.files.length === 0;
+    document.getElementById('err-flyerFile').style.display = flyerErr ? 'block' : 'none';
+    document.getElementById('field-flyerFile').classList.toggle('error', flyerErr);
+    if (flyerErr) hasError = true;
+
+    const consentChecks = ['consent1', 'consent2'];
+    consentChecks.forEach((id, index) => {
+      const box = document.getElementById(`consentBox${index + 1}`);
+      const field = document.getElementById(`field-consent${index + 1}`);
+      const checked = document.getElementById(id).checked;
+      const err = document.getElementById(`err-${id}`);
+      if (!checked) {
+        field.classList.add('error');
+        err.style.display = 'block';
+        box.style.borderColor = '#ef4444';
+        hasError = true;
+      } else {
+        field.classList.remove('error');
+        err.style.display = 'none';
+        box.style.borderColor = '';
+      }
+    });
+
+    return !hasError;
+  }
+
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztiklTKLjm3XBCimFdiErSxiFrz479tQcVv-yThLJoQ0MSzVCAqiEAc0bqbsvpX99Vng/exec';
+
+  function isSuccessfulResponse(response, payload) {
+    if (!response.ok) return false;
+    if (payload && typeof payload === 'object') {
+      if (payload.success === false || payload.ok === false || payload.status === 'error') return false;
+      return true;
+    }
+    return true;
+  }
+
+  document.getElementById('concertForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validateForm()) {
+      const firstErr = document.querySelector('.error');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.querySelector('.btn-submit');
+    const videoInput = document.getElementById('videoFile');
+    const videoFile = videoInput.files[0];
+    if (videoFile) {
+      btn.innerHTML = 'Submitting...<span class="sub-text">(This may take longer due to the video upload)</span>';
+    } else {
+      btn.textContent = 'Submitting...';
+    }
+    btn.disabled = true;
+
+    const val = id => {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    };
+
+    const flyerInput = document.getElementById('flyerFile');
+    const imagePromises = Array.from(flyerInput.files).map(file => {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const ext = file.name.split('.').pop().toLowerCase();
+          resolve({ name: file.name, size: file.size, type: file.type, ext, data: reader.result });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    const images = await Promise.all(imagePromises);
+
+    const videoPayload = videoFile ? await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const ext = videoFile.name.split('.').pop().toLowerCase();
+        resolve({ name: videoFile.name, size: videoFile.size, type: videoFile.type, ext, data: reader.result });
+      };
+      reader.readAsDataURL(videoFile);
+    }) : null;
+
+    const data = {
+      concertTitle: val('concertTitle'),
+      concertDate: val('concertDate'),
+      openTime: val('openTime'),
+      startTime: val('startTime'),
+      venue: val('venue'),
+      performers: val('performers'),
+      program: val('program'),
+      ticket: val('ticket'),
+      inquiryOrg: val('inquiryOrg'),
+      inquiryEmail: val('inquiryEmail'),
+      inquiryUrl: val('inquiryUrl'),
+      instagram: val('instagram'),
+      catchcopy: val('catchcopy'),
+      description: val('description'),
+      orgName: val('orgName'),
+      contactName: val('contactName'),
+      email: val('email'),
+      phone: val('phone'),
+      consent1: document.getElementById('consent1').checked,
+      consent2: document.getElementById('consent2').checked,
+      images,
+      video: videoPayload,
+    };
+
+    try {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data),
+      });
+      let payload = null;
+      const responseText = await response.text();
+      if (responseText) {
+        try {
+          payload = JSON.parse(responseText);
+        } catch (e) {
+          payload = { raw: responseText };
+        }
+      }
+      if (!isSuccessfulResponse(response, payload)) {
+        throw new Error(payload?.message || 'Apps Script returned failure');
+      }
+      document.getElementById('concertForm').style.display = 'none';
+      const banner = document.getElementById('successBanner');
+      banner.style.display = 'block';
+      banner.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      btn.textContent = 'Submit';
+      btn.disabled = false;
+      console.error('Submission error:', err);
+      alert(`Submission failed. Please try again.\n${err.message || ''}`);
+    }
+  });
+
+  document.querySelectorAll('#concertForm input, #concertForm textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      const fieldId = `field-${el.id}`;
+      const field = document.getElementById(fieldId);
+      if (field) field.classList.remove('error');
+      const errEl = document.getElementById('err-' + el.id);
+      if (errEl) errEl.style.display = 'none';
+    });
+  });
+})();
+</script>

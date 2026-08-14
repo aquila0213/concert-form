@@ -84,8 +84,8 @@ function doPost(e) {
 function buildCaption(d) {
   var date = d.concertDate ? formatDate(d.concertDate) : '';
   var timeParts = [];
-  if (d.openTime) timeParts.push('開場 ' + d.openTime);
-  if (d.startTime) timeParts.push('開演 ' + d.startTime);
+  if (d.openTime) timeParts.push('開場 / Doors Open ' + d.openTime);
+  if (d.startTime) timeParts.push('開演 / Performance Starts ' + d.startTime);
 
   var lines = [];
 
@@ -95,26 +95,33 @@ function buildCaption(d) {
   lines.push('');
   lines.push(d.description || '');
   lines.push('');
-  lines.push('【日時】' + date + (timeParts.length ? ' ' + timeParts.join(' / ') : ''));
-  lines.push('【会場】' + (d.venue || ''));
+  lines.push('【日時 / Date & Time】');
+  lines.push(date);
+  if (timeParts.length) lines.push(timeParts.join(' / '));
+
+  lines.push('');
+  lines.push('【会場 / Venue】');
+  lines.push(d.venue || '');
 
   if (d.performers) {
-    lines.push('【出演】' + d.performers);
+    lines.push('');
+    lines.push('【出演 / Performers】');
+    lines.push(d.performers);
   }
 
   lines.push('');
-  lines.push('【チケット】');
+  lines.push('【チケット / Tickets & Admission】');
   lines.push(d.ticket || '');
 
   if (d.program) {
     lines.push('');
-    lines.push('【プログラム】');
+    lines.push('【プログラム / Program】');
     lines.push(d.program);
   }
 
   if (d.inquiryOrg || d.inquiryEmail || d.inquiryUrl) {
     lines.push('');
-    lines.push('【お問い合わせ】');
+    lines.push('【お問い合わせ / Public Contact Information】');
     if (d.inquiryOrg)   lines.push(d.inquiryOrg);
     if (d.inquiryEmail) lines.push(d.inquiryEmail);
     if (d.inquiryUrl)   lines.push(d.inquiryUrl);
@@ -130,50 +137,58 @@ function buildCaption(d) {
 
 // ── 申込者+担当者へ受付確認メールを送信 ──────────────────────────
 function sendNotification(d, caption, imageUrls, videoUrl) {
-  var subject = '【受付完了】Instagram掲載のお申し込み｜' + (d.concertTitle || '');
+  var subject = '【受付完了 / Submission Received】Instagram掲載のお申し込み｜' + (d.concertTitle || '');
 
   var body = '';
   body += 'このたびはJPC公式Instagramへの掲載をお申し込みいただき、ありがとうございます。\n';
   body += '以下の内容で受け付けました。\n';
   body += '\n';
-  body += '内容を確認のうえ、準備が整い次第、JPC公式Instagramにて投稿いたします。\n';
+  body += '内容を確認のうえ、掲載準備を進めます。なお、お申し込みいただいたすべての情報の掲載を保証するものではありません。\n';
   body += 'お申し込み内容に誤りがある場合は、このメールへの返信にてお知らせください。\n';
   body += '\n';
+  body += 'Thank you for submitting your concert information for JPC\'s official Instagram.\n';
+  body += 'We have received your submission with the details below.\n';
+  body += '\n';
+  body += 'We will review your submission and proceed with preparation for publication. Please note that submission does not guarantee that all submitted information will be published.\n';
+  body += 'If you notice any errors in your submission, please reply to this email and let us know.\n';
+  body += '\n';
   body += '━━━━━━━━━━━━━━━━━━━━━━\n';
-  body += '■ 申込者情報\n';
+  body += '■ 申込者情報 / Applicant Information\n';
   body += '━━━━━━━━━━━━━━━━━━━━━━\n';
-  body += '団体名　　：' + (d.orgName || '') + '\n';
-  body += '担当者　　：' + (d.contactName || '') + '\n';
-  body += 'メール　　：' + (d.email || '') + '\n';
-  body += '電話番号　：' + (d.phone || '') + '\n';
-  body += 'Instagram ：' + (d.instagram || '') + '\n';
+  body += '団体名 / Organization　：' + (d.orgName || '') + '\n';
+  body += '担当者 / Contact Person ：' + (d.contactName || '') + '\n';
+  body += 'メール / Email　　　　：' + (d.email || '') + '\n';
+  body += '電話番号 / Phone　　　：' + (d.phone || '') + '\n';
+  body += 'Instagram　　　　　　：' + (d.instagram || '') + '\n';
 
   body += '\n';
   body += '━━━━━━━━━━━━━━━━━━━━━━\n';
-  body += '■ Instagram投稿文（掲載予定の内容）\n';
+  body += '■ Instagram投稿文 / Instagram Post\n';
+  body += '　（掲載予定の内容 / Planned Post Content）\n';
   body += '━━━━━━━━━━━━━━━━━━━━━━\n';
   body += caption + '\n';
   body += '\n';
 
   if (imageUrls.length > 0) {
     body += '━━━━━━━━━━━━━━━━━━━━━━\n';
-    body += '■ チラシ画像（' + imageUrls.length + '枚）\n';
+    body += '■ チラシ画像 / Flyer Images（' + imageUrls.length + '枚 / files）\n';
     body += '━━━━━━━━━━━━━━━━━━━━━━\n';
     imageUrls.forEach(function(url, i) {
-      body += '画像' + (i + 1) + '：' + url + '\n';
+      body += '画像' + (i + 1) + ' / Image ' + (i + 1) + '：' + url + '\n';
     });
     body += '\n';
   }
 
   if (videoUrl) {
     body += '━━━━━━━━━━━━━━━━━━━━━━\n';
-    body += '■ 動画\n';
+    body += '■ 動画 / Video\n';
     body += '━━━━━━━━━━━━━━━━━━━━━━\n';
     body += videoUrl + '\n\n';
   }
 
   body += '━━━━━━━━━━━━━━━━━━━━━━\n';
   body += '※ このメールはフォーム送信時に自動送信されています。\n';
+  body += 'This is an automated email sent when the form was submitted.\n';
 
   var recipients = NOTIFY_EMAIL + (d.email ? ',' + d.email : '');
 

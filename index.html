@@ -481,7 +481,7 @@
             <input type="file" id="videoFile" name="videoFile" accept="video/mp4,video/quicktime,video/x-mov,video/*" />
             <div class="upload-icon">🎬</div>
             <div class="upload-label">動画ファイルをアップロード</div>
-            <div class="upload-sub">MP4 / MOV等・1ファイル50MBまで</div>
+            <div class="upload-sub">MP4 / MOV等・1ファイル35MBまで</div>
             <div class="file-name" id="videoFileName"></div>
           </div>
         </div>
@@ -596,7 +596,11 @@
 
   const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
   const MAX_IMAGE_COUNT = 5;
-  const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+  const MAX_VIDEO_SIZE_BYTES = 35 * 1024 * 1024;
+  // 送信フォームはGoogle Apps Scriptへ画像・動画をBase64化してJSONで送るため、
+  // 実データはこの合計サイズの約1.33倍に膨らむ。Apps Script側のPOST上限(約50MB)に
+  // 収まるよう、画像+動画の合計もここで安全側にチェックする。
+  const MAX_TOTAL_UPLOAD_BYTES = 35 * 1024 * 1024;
 
   function showFileSelectionError(message) {
     alert(message);
@@ -623,7 +627,7 @@
       return false;
     }
     if (file.size > MAX_VIDEO_SIZE_BYTES) {
-      showFileSelectionError('動画ファイルは50MBまでアップロードできます。');
+      showFileSelectionError('動画ファイルは35MBまでアップロードできます。');
       return false;
     }
     return true;
@@ -809,6 +813,15 @@
     };
 
     const flyerInput = document.getElementById('flyerFile');
+
+    const totalUploadBytes = Array.from(flyerInput.files).reduce((sum, f) => sum + f.size, 0) + (videoFile ? videoFile.size : 0);
+    if (totalUploadBytes > MAX_TOTAL_UPLOAD_BYTES) {
+      alert('チラシ画像と動画の合計サイズが大きすぎるため送信できません。\n画像の枚数を減らすか、動画を圧縮してから再度お試しください。');
+      btn.textContent = '送信する';
+      btn.disabled = false;
+      return;
+    }
+
     const imagePromises = Array.from(flyerInput.files).map(file => {
       return new Promise(resolve => {
         const reader = new FileReader();

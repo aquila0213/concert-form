@@ -474,7 +474,7 @@
             <input type="file" id="videoFile" name="videoFile" accept="video/mp4,video/quicktime,video/x-mov,video/*" />
             <div class="upload-icon">🎬</div>
             <div class="upload-label">Upload a video file</div>
-            <div class="upload-sub">MP4 / MOV, up to 50 MB</div>
+            <div class="upload-sub">MP4 / MOV, up to 35 MB</div>
             <div class="file-name" id="videoFileName"></div>
           </div>
         </div>
@@ -592,7 +592,11 @@
 
   const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
   const MAX_IMAGE_COUNT = 5;
-  const MAX_VIDEO_SIZE_BYTES = 50 * 1024 * 1024;
+  const MAX_VIDEO_SIZE_BYTES = 35 * 1024 * 1024;
+  // Images and video are Base64-encoded into a single JSON POST to Google Apps
+  // Script, which inflates the payload by ~1.33x and hits Apps Script's ~50MB
+  // POST limit. Keep the combined raw total safely under that ceiling.
+  const MAX_TOTAL_UPLOAD_BYTES = 35 * 1024 * 1024;
 
   function showFileSelectionError(message) {
     alert(message);
@@ -619,7 +623,7 @@
       return false;
     }
     if (file.size > MAX_VIDEO_SIZE_BYTES) {
-      showFileSelectionError('Video files must be 50 MB or smaller.');
+      showFileSelectionError('Video files must be 35 MB or smaller.');
       return false;
     }
     return true;
@@ -805,6 +809,15 @@
     };
 
     const flyerInput = document.getElementById('flyerFile');
+
+    const totalUploadBytes = Array.from(flyerInput.files).reduce((sum, f) => sum + f.size, 0) + (videoFile ? videoFile.size : 0);
+    if (totalUploadBytes > MAX_TOTAL_UPLOAD_BYTES) {
+      alert('The combined size of the flyer images and video is too large to submit.\nPlease reduce the number of images or compress the video, then try again.');
+      btn.textContent = 'Submit';
+      btn.disabled = false;
+      return;
+    }
+
     const imagePromises = Array.from(flyerInput.files).map(file => {
       return new Promise(resolve => {
         const reader = new FileReader();
